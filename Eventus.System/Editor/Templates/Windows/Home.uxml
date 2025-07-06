@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd"
+         editor-extension-mode="False">
+    <Style src="project://database/Assets/Eventus/Editor/Stylesheet.uss?fileID=7433441132597879392&amp;guid=f2a3e359d505840ed82d657663b6e71c&amp;type=3#Stylesheet"/>
+    <ui:VisualElement name="tbar-home-content" class="toolbar-content" style="display: flex;">
+        <ui:VisualElement name="home-logo" class="image home-logo"
+                          style="background-image: resource(&apos;Eventus_Logo&apos;);"/>
+        <ui:Button text="Documentation EN-US" name="home-doc-en-btn" class="home-btn"/>
+        <ui:VisualElement name="vertical-space" class="vertical-space"/>
+        <ui:Button text="Documentação PT-BR" name="home-doc-pt-btn" class="home-btn"/>
+    </ui:VisualElement>
+</ui:UXML>

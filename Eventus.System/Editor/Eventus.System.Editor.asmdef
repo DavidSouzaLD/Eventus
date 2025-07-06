@@ -1,0 +1,18 @@
+{
+    "name": "Eventus.System.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5f70e412ae815824da8d433d0aaa2fa4"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
