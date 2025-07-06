@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Eventus.Runtime;
+using Eventus.Core;
 
 namespace Eventus.Editor
 {

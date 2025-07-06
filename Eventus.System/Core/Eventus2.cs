@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Eventus.Runtime;
 
-namespace Eventus.Runtime
+namespace Eventus.Core
 {
     public static class Eventus2
     {

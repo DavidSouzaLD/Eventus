@@ -8,7 +8,7 @@
 //                                                              //
 //////////////////////////////////////////////////////////////////
 
-namespace Eventus.Runtime
+namespace Eventus.Core
 {
     public enum Channel
     {

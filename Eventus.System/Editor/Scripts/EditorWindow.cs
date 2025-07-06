@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Eventus.Runtime;
+using Eventus.Core;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -424,7 +424,7 @@ namespace Eventus.Editor
                 newContentBuilder.AppendLine("//      Window at 'Tools > Eventus > Hub' to manage channels.   //");
                 newContentBuilder.AppendLine("//                                                              //");
                 newContentBuilder.AppendLine("//////////////////////////////////////////////////////////////////\n");
-                newContentBuilder.AppendLine("namespace Eventus.Runtime");
+                newContentBuilder.AppendLine("namespace Eventus.Core");
                 newContentBuilder.AppendLine("{");
                 newContentBuilder.AppendLine("    public enum Channel");
                 newContentBuilder.AppendLine("    {");
