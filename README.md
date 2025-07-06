@@ -14,8 +14,7 @@ The entire system is managed through the intuitive Eventus Hub editor window, gi
 
 
 ```
-using EventusAsset;
-using EventusAsset.Core;
+using Eventus.Runtime;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -25,23 +24,23 @@ public class Player : MonoBehaviour
     void Start()
     {
         // Write initial health to the Data Hub
-        Eventus.Write<int>(Channel.PlayerHealth, _health);
+        Eventus2.Write<int>(Channel.PlayerHealth, _health);
         
         // Subscribe to a damage event
-        Eventus.Subscribe<int>(Channel.OnTakeDamage, TakeDamage);
+        Eventus2.Subscribe<int>(Channel.OnTakeDamage, TakeDamage);
     }
 
     private void OnDisable()
     {
         // Always unsubscribe to prevent memory leaks!
-        Eventus.Unsubscribe<int>(Channel.OnTakeDamage, TakeDamage);
+        Eventus2.Unsubscribe<int>(Channel.OnTakeDamage, TakeDamage);
     }
 
     private void TakeDamage(int amount)
     {
         _health -= amount;
         // Update the value in the Data Hub for other systems to read
-        Eventus.Write<int>(Channel.PlayerHealth, _health);
+        Eventus2.Write<int>(Channel.PlayerHealth, _health);
     }
 }
 ```
