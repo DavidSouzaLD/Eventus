@@ -1,4 +1,4 @@
-namespace Eventus.Runtime.Core
+namespace Eventus.Editor
 {
     public static class EditorMessages
     {

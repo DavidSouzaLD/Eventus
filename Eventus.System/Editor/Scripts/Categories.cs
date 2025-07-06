@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Eventus.Runtime.Core
+namespace Eventus.Editor
 {
     [CreateAssetMenu(fileName = "EventusRegistry", menuName = "Eventus/Assets/Categories")]
     public class Categories : ScriptableObject

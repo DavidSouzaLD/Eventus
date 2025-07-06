@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Text;
-
-namespace Eventus.Runtime.Core
+namespace Eventus.Editor
 {
     public static class Global
     {
