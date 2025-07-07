@@ -1,0 +1,280 @@
+:root {
+    --primary-color: rgb(140, 82, 255);
+    --secondary-color: rgb(120, 72, 216);
+    --text-color: rgb(255, 255, 255);
+    --button-color: rgb(60, 60, 60);
+    --simple-gray: rgb(65, 65, 65);
+    --strong-black: rgb(46, 46, 46);
+    --toolbar-selected: rgb(46, 46, 46);
+    --toolbar-unselected: rgb(65, 65, 65);
+    --border-radius: 10px;
+    --content-margin: 10px;
+    --default-height: 40px;
+}
+
+#body {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+#header {
+    height: var(--default-height);
+}
+
+#content {
+    background-color: var(--strong-black);
+    flex-grow: 1;
+}
+
+.toolbar {
+    height: 100%;
+    width: 100%;
+    align-items: flex-end;
+}
+
+.toolbar-btn {
+    cursor: link;
+    width: 100%;
+    height: 100%;
+}
+
+.toolbar-select-btn {
+    background-color: var(--toolbar-selected);
+}
+
+.toolbar-btn:hover {
+    background-color: var(--toolbar-selected);
+}
+
+.toolbar-content {
+    display: none;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    align-self: auto;
+    align-content: auto;
+    flex-grow: 1;
+}
+
+.image {
+    -unity-background-scale-mode: scale-to-fit;
+    min-width: 20px;
+    min-height: 20px;
+}
+
+.unity-button {
+    -unity-background-image-tint-color: rgba(255, 255, 255, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    border-right-color: rgba(0, 0, 0, 0);
+    border-top-color: rgba(0, 0, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+}
+
+.home-btn {
+    width: 200px;
+    height: 40px;
+    min-width: 120px;
+    min-height: 40px;
+    font-size: 12px;
+    max-width: 250px;
+    max-height: 35px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgb(140, 82, 255);
+    border-right-color: rgb(140, 82, 255);
+    border-top-color: rgb(140, 82, 255);
+    border-bottom-color: rgb(140, 82, 255);
+    background-color: rgb(51, 51, 51);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.home-btn:hover {
+    background-color: var(--primary-color);
+    cursor: link;
+}
+
+.home-logo {
+    width: 210px;
+    height: 206px;
+}
+
+.vertical-space {
+    width: 0;
+    height: 0;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.template-container {
+    flex-grow: 1;
+}
+
+.channels-header {
+    flex-grow: 1;
+    width: 100%;
+    max-height: var(--default-height);
+    background-color: var(--toolbar-unselected);
+    justify-content: space-between;
+    flex-direction: row;
+    align-self: auto;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 5px;
+}
+
+.channels-header-title {
+    color: var(--text-color);
+}
+
+.channels-textfield {
+    color: var(--text-color);
+    width: 200px;
+    height: 30px;
+    min-width: 80px;
+    min-height: 30px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-left-color: rgba(0, 0, 0, 0.49);
+    border-right-color: rgba(0, 0, 0, 0.49);
+    border-top-color: rgba(0, 0, 0, 0.49);
+    border-bottom-color: rgba(0, 0, 0, 0.49);
+}
+
+.channels-scrollview {
+    width: 100%;
+    flex-grow: 1;
+    background-color: var(--strong-black);
+}
+
+.channels-footer {
+    max-height: var(--default-height);
+    width: 100%;
+    flex-grow: 1;
+    background-color: var(--toolbar-unselected);
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.channels-footer-btn {
+    width: 90px;
+    height: 30px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-left-color: rgba(0, 0, 0, 0.49);
+    border-right-color: rgba(0, 0, 0, 0.49);
+    border-top-color: rgba(0, 0, 0, 0.49);
+    border-bottom-color: rgba(0, 0, 0, 0.49);
+    cursor: link;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.channels-footer-sides {
+    width: auto;
+    height: 100%;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.unity-toggle {
+    overflow: visible;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+}
+
+.unity-toggle > .unity-label {
+    min-width: auto;
+    color: var(--text-color);
+}
+
+.unity-toggle > .unity-toggle__input {
+    margin-left: 5px;
+}
+
+.root-list-item {
+    flex-grow: 1;
+    background-color: var(--strong-black);
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 10px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(51, 51, 51);
+    border-right-color: rgb(51, 51, 51);
+    border-top-color: rgb(51, 51, 51);
+    border-bottom-color: rgb(51, 51, 51);
+    max-height: 30px;
+    min-height: 30px;
+    height: 30px;
+    padding-right: 5px;
+}
+
+.textfield-name {
+    color: var(--text-color);
+    -unity-text-align: middle-left;
+    flex-grow: 1;
+    max-width: 100%;
+}
+
+.list-item-delete-btn {
+    border-radius: 5px;
+    -unity-text-align: middle-center;
+    background-color: rgb(60, 60, 60);
+    width: 20px;
+    min-width: 20px;
+    min-height: 20px;
+    height: 20px;
+    max-width: 20px;
+    max-height: 20px;
+    border-left-color: rgb(0, 0, 0);
+    border-right-color: rgb(0, 0, 0);
+    border-top-color: rgb(0, 0, 0);
+    border-bottom-color: rgb(0, 0, 0);
+    transition-property: border-radius;
+    transition-duration: 1s;
+    transition-delay: 0s;
+    transition-timing-function: ease-out-cubic;
+}
+
+.list-item-delete-btn:hover {
+    width: 25px;
+    height: 23px;
+    border-radius: 5px;
+    -unity-text-align: middle-center;
+    background-color: rgb(89, 61, 61);
+    cursor: link;
+    border-top-left-radius: 90px;
+    border-top-right-radius: 90px;
+    border-bottom-right-radius: 90px;
+    border-bottom-left-radius: 90px;
+    transition-duration: 3s;
+    transition-delay: 0.1s;
+    transition-timing-function: ease-out-cubic;
+    transition-property: all;
+}
