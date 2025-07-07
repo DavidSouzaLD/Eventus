@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Eventus.System/Editor/USS/Stylesheet.uss?fileID=7433441132597879392&amp;guid=f2a3e359d505840ed82d657663b6e71c&amp;type=3#Stylesheet" />
-    <ui:VisualElement name="category-item-root" class="root-list-item">
-        <ui:TextField placeholder-text="Insert here.." name="channel-name-label" max-length="32" class="channel-item-label textfield-name" />
-        <ui:Button text="X" name="delete-button" class="channel-item-delete-btn list-item-delete-btn" />
-    </ui:VisualElement>
-</ui:UXML>
