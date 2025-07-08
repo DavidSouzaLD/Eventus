@@ -12,4 +12,8 @@ namespace Eventus.Core
 {
 
 
+    public sealed class GlobalRef_CharacterController : Channel{}
+
+    public sealed class GlobalRef_MainCamera : Channel{}
+
 }

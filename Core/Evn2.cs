@@ -11,19 +11,14 @@ namespace Eventus.Core
 
         #region Blackboard
 
-        public static void Write<TChannel, TValue>(TValue value) where TChannel : Channel
+        public static void Write<TRef, TObject>(TObject value)
         {
-            DataHub[typeof(TChannel)] = value;
+            DataHub[typeof(TRef)] = value;
         }
 
-        public static TValue Read<TChannel, TValue>() where TChannel : Channel
+        public static TObject Read<TRef, TObject>()
         {
-            if (DataHub.TryGetValue(typeof(TChannel), out var value))
-                if (value is TValue typedValue)
-                    return typedValue;
-
-            Debug.LogWarning($"Data for key '{typeof(TChannel).Name}' not found or with incorrect type. Returning default value.");
-            return default;
+            return (TObject)DataHub[typeof(TRef)];
         }
 
         #endregion
