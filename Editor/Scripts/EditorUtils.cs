@@ -10,7 +10,7 @@ namespace Eventus.Editor
     {
         private static Categories _cachedCategories;
 
-        public static VisualTreeAsset LoadUXML(string fileName)
+        public static VisualTreeAsset LoadUxml(string fileName)
         {
             var guids = AssetDatabase.FindAssets($"{fileName} t:VisualTreeAsset");
             if (guids.Length == 0)
@@ -49,11 +49,11 @@ namespace Eventus.Editor
 
         public static string FindChannelScriptPath()
         {
-            var guids = AssetDatabase.FindAssets("Channel t:Script");
+            var guids = AssetDatabase.FindAssets("Channels t:Script");
             return guids.Length == 0
                 ? null
                 : guids.Select(AssetDatabase.GUIDToAssetPath)
-                    .FirstOrDefault(path => Path.GetFileName(path) == "Channel.cs");
+                    .FirstOrDefault(path => Path.GetFileName(path) == "Channels.cs");
         }
     }
 }

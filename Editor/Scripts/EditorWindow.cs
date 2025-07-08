@@ -86,7 +86,7 @@ namespace Eventus.Editor
 
         private void OnEnable()
         {
-            LoadChannelsFromEnum();
+            LoadChannelsFromReflection();
             if (m_Root != null) PopulateChannelList();
         }
 
@@ -108,7 +108,7 @@ namespace Eventus.Editor
             m_Root = rootVisualElement;
 
             // Main root
-            m_RootTree = EditorUtils.LoadUXML("Window");
+            m_RootTree = EditorUtils.LoadUxml("Window");
             m_RootTree.CloneTree(m_Root);
 
             // Get current content
@@ -120,7 +120,7 @@ namespace Eventus.Editor
             // Get windows and setting tabs
             foreach (var tab in toolbar_tabs)
             {
-                tab.contentTree = EditorUtils.LoadUXML(tab.tabName);
+                tab.contentTree = EditorUtils.LoadUxml(tab.tabName);
                 tab.contentTree.CloneTree(m_ContentRoot);
             }
 
@@ -167,13 +167,13 @@ namespace Eventus.Editor
 
         private void InitializeComponents()
         {
-            _channelItemTemplate = EditorUtils.LoadUXML("ChannelItem");
+            _channelItemTemplate = EditorUtils.LoadUxml("ChannelItem");
             _channelListContainer = m_Root.Q<ScrollView>("channels-list-scrollview");
             _categoriesDropdownField = m_Root.Q<DropdownField>("channels-categories-field");
             _searchField = m_Root.Q<TextField>("channels-search-field");
             _newChannelNameField = m_Root.Q<TextField>("new-channel-name-field");
             
-            _categoryItemTemplate = EditorUtils.LoadUXML("CategoryItem");
+            _categoryItemTemplate = EditorUtils.LoadUxml("CategoryItem");
             _categoryListContainer = m_Root.Q<ScrollView>("categories-list-scrollview");
             _newCategoryField = m_Root.Q<TextField>("new-category-name-field");
             _addCategoryButton = m_Root.Q<Button>("add-category-button");
@@ -264,16 +264,19 @@ namespace Eventus.Editor
 
         #region Channel Management Logic
 
-        private void LoadChannelsFromEnum()
+        private void LoadChannelsFromReflection()
         {
             _channelEntries.Clear();
-            var channelValues = Enum.GetValues(typeof(Channel));
+            
+            var channelTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => type.IsClass && !type.IsAbstract && type.IsSubclassOf(typeof(Channel)));
 
-            foreach (var channelValue in channelValues)
+            foreach (var type in channelTypes)
             {
                 var entry = new ChannelData
                 {
-                    name = channelValue.ToString(),
+                    name = type.Name,
                     isMarkedForDeletion = false
                 };
                 _channelEntries.Add(entry);
@@ -285,33 +288,21 @@ namespace Eventus.Editor
             if (_channelListContainer == null || _channelItemTemplate == null) return;
 
             _channelListContainer.Clear();
+            
+            var searchQuery = _searchField.value?.ToLower().Trim() ?? "";
+            
+            var entriesToDraw = _channelEntries
+                .Where(e => !e.isMarkedForDeletion && (string.IsNullOrEmpty(searchQuery) || e.name.ToLower().Contains(searchQuery)))
+                .OrderBy(e => e.name);
 
-            var selectedCategory = GetCurrentCategory();
-            var searchQuery = _searchField.value;
-            var lowerCaseQuery = string.IsNullOrEmpty(searchQuery) ? "" : searchQuery.ToLower().Trim();
-            var entriesToDraw = _channelEntries.Where(e => !e.isMarkedForDeletion);
-
-            if (selectedCategory != Global.DEFAULT_CATEGORY)
-            {
-                var prefix = selectedCategory + "_";
-                entriesToDraw = entriesToDraw.Where(e => e.name.StartsWith(prefix));
-            }
-
-            if (!string.IsNullOrEmpty(lowerCaseQuery))
-                entriesToDraw = entriesToDraw.Where(e =>
-                    e.name.ToLower().Contains(lowerCaseQuery));
-
-
-            var sortedEntries = entriesToDraw.OrderBy(e => e.name);
-
-            foreach (var entryData in sortedEntries)
+            foreach (var entryData in entriesToDraw)
             {
                 var newItem = _channelItemTemplate.Instantiate();
                 var nameField = newItem.Q<TextField>("channel-name-label");
                 var removeButton = newItem.Q<Button>("delete-button");
 
                 nameField.value = entryData.name;
-
+                
                 nameField.RegisterValueChangedCallback(evt =>
                 {
                     if (evt.newValue == entryData.name) return;
@@ -319,7 +310,7 @@ namespace Eventus.Editor
                     UpdateWindowTitle();
                     entryData.name = evt.newValue;
                 });
-
+                
                 removeButton.clicked += () =>
                 {
                     if (!EditorUtility.DisplayDialog(EditorMessages.ConfirmDeleteTitle,
@@ -387,14 +378,15 @@ namespace Eventus.Editor
             if (!EditorUtility.DisplayDialog("Confirm Revert",
                     "Are you sure you want to discard all unsaved changes?",
                     "Yes, Discard Changes", "Cancel")) return;
-            LoadChannelsFromEnum();
+
+            LoadChannelsFromReflection();
             PopulateChannelList();
 
             _needToRecompile = false;
             UpdateWindowTitle();
         }
 
-        public void GenerateChannel()
+        private void GenerateChannel()
         {
             if (!_needToRecompile)
             {
@@ -403,6 +395,8 @@ namespace Eventus.Editor
             }
 
             var scriptPath = EditorUtils.FindChannelScriptPath();
+
+            Debug.Log(scriptPath);
             if (string.IsNullOrEmpty(scriptPath))
             {
                 EditorUtility.DisplayDialog(EditorMessages.ErrorTitle, EditorMessages.ErrorFindChannelScript, "OK");
@@ -414,7 +408,7 @@ namespace Eventus.Editor
                 var finalEntries = _channelEntries.Where(e => !e.isMarkedForDeletion).OrderBy(e => e.name).ToList();
                 var newContentBuilder = new StringBuilder();
 
-                // Warning
+                // Template
                 newContentBuilder.AppendLine("//////////////////////////////////////////////////////////////////");
                 newContentBuilder.AppendLine("//                                                              //");
                 newContentBuilder.AppendLine("//      AUTO-GENERATED BY THE EVENTUS CHANNEL MANAGER.          //");
@@ -425,20 +419,17 @@ namespace Eventus.Editor
                 newContentBuilder.AppendLine("//                                                              //");
                 newContentBuilder.AppendLine("//////////////////////////////////////////////////////////////////\n");
                 newContentBuilder.AppendLine("namespace Eventus.Core");
-                newContentBuilder.AppendLine("{");
-                newContentBuilder.AppendLine("    public enum Channel");
-                newContentBuilder.AppendLine("    {");
-                
+                newContentBuilder.AppendLine("{\n");
+                newContentBuilder.AppendLine("");
                 foreach (var entry in finalEntries)
                 {
-                    newContentBuilder.AppendLine($"        {entry.name},");
+                    newContentBuilder.AppendLine($"    public sealed class {entry.name} : Channel" + "{}\n");
                 }
-
-                newContentBuilder.AppendLine("    }");
                 newContentBuilder.AppendLine("}");
-
+                
+                // Reflection
                 File.WriteAllText(scriptPath, newContentBuilder.ToString());
-                Debug.Log("[Eventus] 'Channel.cs' has been updated. Scheduling UI update after recompilation...");
+                Debug.Log("[Eventus] 'Channels.cs' has been updated. Scheduling UI update after recompilation...");
                 EditorApplication.delayCall += OnAfterRecompile;
                 AssetDatabase.ImportAsset(scriptPath, ImportAssetOptions.ForceUpdate);
             }
@@ -458,7 +449,7 @@ namespace Eventus.Editor
             EditorUtility.DisplayDialog(EditorMessages.SuccessTitle, EditorMessages.SuccessFileSave, "OK");
 
             UpdateWindowTitle();
-            LoadChannelsFromEnum();
+            LoadChannelsFromReflection();
             PopulateChannelList();
         }
 
@@ -505,7 +496,7 @@ namespace Eventus.Editor
 
             _categoryListContainer.Clear();
 
-            var search = _categorySearchField?.value?.ToLowerInvariant()?.Trim();
+            var search = _categorySearchField?.value?.ToLowerInvariant().Trim();
             var filteredCategories = string.IsNullOrEmpty(search)
                 ? _categoriesAsset.categories
                 : _categoriesAsset.categories.Where(c => c.ToLowerInvariant().Contains(search)).ToList();
@@ -518,7 +509,7 @@ namespace Eventus.Editor
 
                 var isDefault = category == Global.DEFAULT_CATEGORY;
                 nameField.value = isDefault ? category + " [ReadOnly]" : category;
-                var indexInSO = _categoriesAsset.categories.IndexOf(category);
+                var indexInSo = _categoriesAsset.categories.IndexOf(category);
 
                 if (isDefault)
                 {
@@ -544,8 +535,8 @@ namespace Eventus.Editor
                 {
                     nameField.RegisterValueChangedCallback(evt =>
                     {
-                        if (evt.newValue == _categoriesAsset.categories[indexInSO]) return;
-                        _categoriesAsset.categories[indexInSO] = evt.newValue;
+                        if (evt.newValue == _categoriesAsset.categories[indexInSo]) return;
+                        _categoriesAsset.categories[indexInSo] = evt.newValue;
                         EditorUtility.SetDirty(_categoriesAsset);
                     });
                 }
@@ -556,7 +547,7 @@ namespace Eventus.Editor
                             string.Format(EditorMessages.ConfirmCategoryDeleteBody, category), "Yes", "No"))
                         return;
 
-                    _categoriesAsset.categories.RemoveAt(indexInSO);
+                    _categoriesAsset.categories.RemoveAt(indexInSo);
                     EditorUtility.SetDirty(_categoriesAsset);
                     
                     PopulateCategoryList();

@@ -10,8 +10,6 @@
 
 namespace Eventus.Core
 {
-    public enum Channel
-    {
-        Testdddddddddddddddddddddddd,
-    }
+
+
 }
